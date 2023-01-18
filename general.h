@@ -10,7 +10,7 @@
 # define MINC 80
 # define MINR (MINC / 5)
 
-bool	player;
+bool	_player;
 
 typedef	struct console
 {
@@ -26,13 +26,14 @@ typedef	struct ball
 	int	color;
 	int	posX;
 	int	posY;
-	int	speed;
+	int	counter_force;
 	int	x_step;
 	int	y_step;
 } s_ball;
 
 typedef	struct racket
 {
+	int		score;
 	int		hight;
 	int		color;
 	int		posX;
