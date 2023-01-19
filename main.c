@@ -92,7 +92,7 @@ void	check_for_coll(s_game *game_inf){
 		game_inf->ball.x_step  *= -1;
 	if (tmpY < 1 || tmpY > MINR - 2)
 		game_inf->ball.y_step *= -1;
-	if (tmpX < 1 || tmpX > MINC - 1)
+	if (tmpX < 0 || tmpX > MINC - 1)
 	{
 		if (tmpX < 1)
 			game_inf->racket[1].score += 1;
