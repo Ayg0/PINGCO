@@ -1,11 +1,18 @@
 #include "general.h"
 
 void	update_layout(s_game *game_inf, int u_flag){
-	int	x = game_inf->racket[_player].posX;
-	int	y = game_inf->racket[_player].posY[1];
-	game_inf->Co.layout[y - 1][x] = ('|' * u_flag) + (' ' * !u_flag);
-	game_inf->Co.layout[y][x] = ('|' * u_flag) + (' ' * !u_flag);
-	game_inf->Co.layout[y + 1][x] = ('|' * u_flag) + (' ' * !u_flag);
+	int	x[2];
+	int	y[2];
+	x[0] = game_inf->racket[0].posX;
+	x[1] = game_inf->racket[1].posX;
+	y[0] = game_inf->racket[0].posY[1];
+	y[1] = game_inf->racket[1].posY[1];
+	for (int i = 0; i < 2; i++)
+	{
+		game_inf->Co.layout[y[i] - 1][x[i]] = ('|' * u_flag) + (' ' * !u_flag);
+		game_inf->Co.layout[y[i]][x[i]] = ('|' * u_flag) + (' ' * !u_flag);
+		game_inf->Co.layout[y[i] + 1][x[i]] = ('|' * u_flag) + (' ' * !u_flag);
+	}
 }
 
 void	init_obj(s_game *game_inf, int init_rackets, int init_ball){
@@ -14,6 +21,7 @@ void	init_obj(s_game *game_inf, int init_rackets, int init_ball){
 		game_inf->ball.posX = MINC / 2;
 		game_inf->Co.layout[MINR / 2][ MINC / 2] = '0';
 	}
+	game_inf->Co.layout[game_inf->ball.posY][game_inf->ball.posX] = '0';
 	update_layout(game_inf, 1);
 }
 
@@ -25,8 +33,7 @@ void	init_layout(s_game *game_inf, int init_rackets, int init_ball){
 		j = 0;
 		while(j < MINC)
 		{
-			if (init_rackets && init_ball)
-				game_inf->Co.layout[i][j] = ' ';
+			game_inf->Co.layout[i][j] = ' ';
 			if (!i || !j || j == (MINC - 1) || i == MINR - 1)
 				game_inf->Co.layout[i][j] = '#';
 			j++;
@@ -45,13 +52,13 @@ void	init_game(s_game *game_inf){
 	game_inf->ball.counter_force = 250;
 	game_inf->ball.x_step = 1;
 	game_inf->ball.y_step = 1;
-	game_inf->racket[1].posY[0] = (MINR / 2) - 1;
-	game_inf->racket[1].posY[1] = (MINR / 2);
-	game_inf->racket[1].posY[2] = (MINR / 2) + 1;
+	for (int i = 0; i < 2; i++)
+	{
+		game_inf->racket[i].posY[0] = (MINR / 2) - 1;
+		game_inf->racket[i].posY[1] = (MINR / 2);
+		game_inf->racket[i].posY[2] = (MINR / 2) + 1;
+	}
 	game_inf->racket[1].posX = 1;
-	game_inf->racket[0].posY[0] = (MINR / 2) - 1;
-	game_inf->racket[0].posY[1] = (MINR / 2);
-	game_inf->racket[0].posY[2] = (MINR / 2) + 1;
 	game_inf->racket[0].posX = MINC - 2;
 	game_inf->racket[0].score = 0;
 	game_inf->racket[1].score = 0;
@@ -164,7 +171,7 @@ int	main(){
 	_player = 0;
 	init_game(&game_inf);
 	draw_layout(&game_inf);
-	while (game_inf.racket[0].score != 10 || game_inf.racket[1].score != 10)
+	while (1)
 	{
 		move_ball(&game_inf);
 		draw_layout(&game_inf);
